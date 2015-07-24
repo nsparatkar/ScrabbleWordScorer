@@ -30,7 +30,9 @@ class ScrabbleSolver{
 			rackCount[rack.at(rackPosition) - BASE]++;
 		}
 		for(int i = 0; i < 26; i++) {
-			difference = abs(wordCount[i] - rackCount[i]);
+			if(wordCount[i] > rackCount[i]) {
+				difference += wordCount[i] - rackCount[i];
+			}
 		}
 		return difference <= spaceCount;
 	}
