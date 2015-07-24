@@ -16,15 +16,21 @@ class ScrabbleSolver{
 	const char SPACE = ' ';
 	const char BASE = 'a';
 	const char END = 'z';
+	string constraint;
 	
-	bool constraintSatisfied() {
+	bool constraintSatisfied(string word) {
+		for(int i = 0; i < constraint.length(); i+=2){
+			char constratintCharacter = constraint.at(i);
+			int constraintPosition = (int) constraint.at(i+1);
+			bool validWord = word.at(constraintPosition) == constraintCharacter;
+			if(!validWord)
+				return false;
+		}
 		return true;
 	}
 	
 	bool isWordGeneratable(string word){
 		
-		if(constraintSatisfied() == false)
-			return false;
 		int wordPosition = 0;
 		int rackPosition = 0;
 		int wordCount[26] = {0};
@@ -55,14 +61,14 @@ class ScrabbleSolver{
 	}
 	
 	void printScores() {
-			for( map<int, vector<string> >::reverse_iterator i = sortedScore.rbegin(); i != sortedScore.rend(); i++){
-				cout << i->first << " ";
-				for(vector<string>::iterator j = i->second.begin(); j != i->second.end(); j++) {
-					cout << *j << " ";
-				}
-				cout << endl;
+		for( map<int, vector<string> >::reverse_iterator i = sortedScore.rbegin(); i != sortedScore.rend(); i++){
+			cout << i->first << " ";
+			for(vector<string>::iterator j = i->second.begin(); j != i->second.end(); j++) {
+				cout << *j << " ";
 			}
+			cout << endl;
 		}
+	}
 	
 	
 	public:
@@ -88,7 +94,9 @@ class ScrabbleSolver{
 				if(isWordGeneratable(tableIterator->first)) {
 					int score = calculateWordScore(tableIterator->first);
 					for(vector<string>::iterator wordsIterator = tableIterator->second.begin(); wordsIterator != tableIterator->second.end(); wordsIterator++) {
-						sortedScore[score].push_back(*wordsIterator);
+						if(constraintSatisfied(*wordsIterator)) {
+							sortedScore[score].push_back(*wordsIterator);
+						}
 					}
 				}
 			}
