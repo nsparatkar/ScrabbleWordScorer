@@ -17,7 +17,14 @@ class ScrabbleSolver{
 	const char BASE = 'a';
 	const char END = 'z';
 	
+	bool constraintSatisfied() {
+		return true;
+	}
+	
 	bool isWordGeneratable(string word){
+		
+		if(constraintSatisfied() == false)
+			return false;
 		int wordPosition = 0;
 		int rackPosition = 0;
 		int wordCount[26] = {0};
@@ -46,6 +53,16 @@ class ScrabbleSolver{
 		}
 		return score;
 	}
+	
+	void printScores() {
+			for( map<int, vector<string> >::reverse_iterator i = sortedScore.rbegin(); i != sortedScore.rend(); i++){
+				cout << i->first << " ";
+				for(vector<string>::iterator j = i->second.begin(); j != i->second.end(); j++) {
+					cout << *j << " ";
+				}
+				cout << endl;
+			}
+		}
 	
 	
 	public:
@@ -76,16 +93,6 @@ class ScrabbleSolver{
 				}
 			}
 			printScores();
-		}
-		
-		void printScores() {
-			for( map<int, vector<string> >::reverse_iterator i = sortedScore.rbegin(); i != sortedScore.rend(); i++){
-				cout << i->first << " ";
-				for(vector<string>::iterator j = i->second.begin(); j != i->second.end(); j++) {
-					cout << *j << " ";
-				}
-				cout << endl;
-			}
 		}
 		
 		void changeRack(string rack) {
