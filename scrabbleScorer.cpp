@@ -19,15 +19,20 @@ class ScrabbleSolver{
 	
 	bool isWordGeneratable(string word){
 		int wordPosition = 0;
-		for (int  rackPosition = 0; ( rackPosition < rack.length() ) && ( wordPosition < word.length() ); rackPosition++) {
-			if(word[wordPosition] == rack[rackPosition]) {
-				wordPosition++;
-			}
+		int rackPosition = 0;
+		int wordCount[26] = {0};
+		int rackCount[26] = {0};
+		int difference = 0;
+		for(int wordPosition = 0; wordPosition < word.length(); wordPosition++) {
+			wordCount[word.at(wordPosition) - BASE]++;
 		}
-		if((word.length() - wordPosition) <= spaceCount) {
-			return true;
+		for(int rackPosition = 0; rackPosition < rack.length(); rackPosition++) {
+			rackCount[rack.at(rackPosition) - BASE]++;
 		}
-		return false;
+		for(int i = 0; i < 26; i++) {
+			difference = abs(wordCount[i] - rackCount[i]);
+		}
+		return difference <= spaceCount;
 	}
 	
 	int calculateWordScore(string word) {
