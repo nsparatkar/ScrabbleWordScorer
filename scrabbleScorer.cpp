@@ -68,8 +68,8 @@ class ScrabbleSolver{
 			for(map<string, vector<string> >::iterator tableIterator = anagramTable.begin(); tableIterator != anagramTable.end(); tableIterator++) {
 				if(isWordGeneratable(tableIterator->first)) {
 					int score = calculateWordScore(tableIterator->first);
-					for(vector<string>::iterator j = tableIterator->second.begin(); j != tableIterator->second.end(); j++) {
-						sortedScore[score].push_back(*j);
+					for(vector<string>::iterator wordsIterator = tableIterator->second.begin(); wordsIterator != tableIterator->second.end(); wordsIterator++) {
+						sortedScore[score].push_back(*wordsIterator);
 					}
 				}
 			}
