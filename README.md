@@ -1,2 +1,2 @@
-# wordscore
-Given a scrabble rack, find the best possible word from sowpod dictionary that will have a maximum score.
+# Scrabble : Word Scorer
+Given a scrabble rack, find the scores of words that can be formed from the rack and ranks them according to the scores.
