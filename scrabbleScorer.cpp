@@ -17,6 +17,29 @@ class ScrabbleSolver{
 	const char BASE = 'a';
 	const char END = 'z';
 	
+	bool isWordGeneratable(string word){
+		int wordPosition = 0;
+		for (int  rackPosition = 0; ( rackPosition < rack.length() ) && ( wordPosition < word.length() ); rackPosition++) {
+			if(word[wordPosition] == rack[rackPosition]) {
+				wordPosition++;
+			}
+		}
+		if((word.length() - wordPosition) <= spaceCount) {
+			return true;
+		}
+		return false;
+	}
+	
+	int calculateWordScore(string word) {
+		int index = 0;
+		int score = 0;
+		int scrabbleLetterScores[] = {1,3,3,2,1,4,2,4,1,8,10,1,2,1,1,3,8,1,1,1,1,4,10,10,10,10};
+		for (index = 0; index < word.length(); index++) {
+			score += scrabbleLetterScores[word.at(index) - BASE];
+		}
+		return score;
+	}
+	
 	
 	public:
 		ScrabbleSolver(string rack){
