@@ -7,23 +7,26 @@
 
 using namespace std;
 
-class ScrabbleSolver{
+const char SPACE = ' ';
+const char BASE = 'a';
+const char END = 'z';
+	
+
+class WordScoreGenerator{
 	
 	string rack;
 	int spaceCount;
 	map <string, vector<string> > anagramTable;
 	map<int, vector<string> > sortedScore;
-	const char SPACE = ' ';
-	const char BASE = 'a';
-	const char END = 'z';
 	string constraint;
 	
 	bool constraintSatisfied(string word) {
-		for(int i = 0; i < constraint.length(); i+=2){
-			char constratintCharacter = constraint.at(i);
-			int constraintPosition = (int) constraint.at(i+1);
+		
+		for (int i = 0; i < constraint.length(); i += 2){
+			char constraintCharacter = constraint.at(i);
+			int constraintPosition = (int) constraint.at(i + 1);
 			bool validWord = word.at(constraintPosition) == constraintCharacter;
-			if(!validWord)
+			if ( !validWord )
 				return false;
 		}
 		return true;
@@ -33,18 +36,18 @@ class ScrabbleSolver{
 		
 		int wordPosition = 0;
 		int rackPosition = 0;
-		int wordCount[26] = {0};
-		int rackCount[26] = {0};
+		int wordLetterCount[26] = {0};
+		int rackLetterCount[26] = {0};
 		int difference = 0;
-		for(int wordPosition = 0; wordPosition < word.length(); wordPosition++) {
-			wordCount[word.at(wordPosition) - BASE]++;
+		for (int wordPosition = 0; wordPosition < word.length(); wordPosition++) {
+			wordLetterCount[word.at(wordPosition) - BASE]++;
 		}
-		for(int rackPosition = 0; rackPosition < rack.length(); rackPosition++) {
-			rackCount[rack.at(rackPosition) - BASE]++;
+		for (int rackPosition = 0; rackPosition < rack.length(); rackPosition++) {
+			rackLetterCount[rack.at(rackPosition) - BASE]++;
 		}
-		for(int i = 0; i < 26; i++) {
-			if(wordCount[i] > rackCount[i]) {
-				difference += wordCount[i] - rackCount[i];
+		for (int i = 0; i < 26; i++) {
+			if( wordLetterCount[i] > rackLetterCount[i] ) {
+				difference += wordLetterCount[i] - rackLetterCount[i];
 			}
 		}
 		return difference <= spaceCount;
@@ -61,9 +64,9 @@ class ScrabbleSolver{
 	}
 	
 	void printScores() {
-		for( map<int, vector<string> >::reverse_iterator i = sortedScore.rbegin(); i != sortedScore.rend(); i++){
+		for ( map<int, vector<string> >::reverse_iterator i = sortedScore.rbegin(); i != sortedScore.rend(); i++){
 			cout << i->first << " ";
-			for(vector<string>::iterator j = i->second.begin(); j != i->second.end(); j++) {
+			for ( vector<string>::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
 				cout << *j << " ";
 			}
 			cout << endl;
@@ -72,7 +75,7 @@ class ScrabbleSolver{
 	
 	
 	public:
-		ScrabbleSolver(string rack){
+		WordScoreGenerator(string rack){
 			string inputFileName = "C:/Users/test/Documents/words.txt";
 			spaceCount = count(rack.begin(), rack.end(), SPACE);
 			rack.erase(remove(rack.begin(), rack.end(), SPACE), rack.end());
@@ -82,7 +85,7 @@ class ScrabbleSolver{
 			ifstream readFile;
 			readFile.open(inputFileName.c_str());
 			string currentWord;
-			while(getline(readFile, currentWord)){
+			while (getline(readFile, currentWord)){
 				string sortedWord = currentWord;
 				sort(sortedWord.begin(), sortedWord.end());
 				anagramTable[sortedWord].push_back(currentWord);
@@ -90,10 +93,10 @@ class ScrabbleSolver{
 		}
 		
 		void solve() {
-			for(map<string, vector<string> >::iterator tableIterator = anagramTable.begin(); tableIterator != anagramTable.end(); tableIterator++) {
-				if(isWordGeneratable(tableIterator->first)) {
+			for (map<string, vector<string> >::iterator tableIterator = anagramTable.begin(); tableIterator != anagramTable.end(); tableIterator++) {
+				if (isWordGeneratable(tableIterator->first)) {
 					int score = calculateWordScore(tableIterator->first);
-					for(vector<string>::iterator wordsIterator = tableIterator->second.begin(); wordsIterator != tableIterator->second.end(); wordsIterator++) {
+					for (vector<string>::iterator wordsIterator = tableIterator->second.begin(); wordsIterator != tableIterator->second.end(); wordsIterator++) {
 						if(constraintSatisfied(*wordsIterator)) {
 							sortedScore[score].push_back(*wordsIterator);
 						}
@@ -114,8 +117,8 @@ class ScrabbleSolver{
 
 int main(){
 	
-	ScrabbleSolver scrabble("quizze ");
-	scrabble.solve();
+	WordScoreGenerator scoreGenerator("quizze ");
+	scoreGenerator.solve();
 	
 	return 0;
 }
