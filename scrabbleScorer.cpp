@@ -80,6 +80,13 @@ class ScrabbleSolver{
 				cout << endl;
 			}
 		}
+		
+		void changeRack(string rack) {
+			spaceCount = count(rack.begin(), rack.end(), SPACE);
+			rack.erase(remove(rack.begin(), rack.end(), SPACE), rack.end());
+			sort(rack.begin(), rack.end());
+			this->rack = rack;
+		}
 	
 };
 
